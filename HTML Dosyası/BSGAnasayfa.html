@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+    BSGAnasayfa
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #002749;
+        }
+
+        .card {
+            background-color: #ffed00;
+        }
+
+        .list-group a {
+            background-color: #ffed00;
+        }
+
+        a {
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .row-button1 {
+            width: 150px;
+        }
+
+        .vertical-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-4">
+
+                <div class="card">
+                    <a onclick="DirectPage(followerId)"><img src="C:\Users\stajyer\Desktop\HTML\resim.jpg" alt="Profil fotosu" style="width:100%;" title="Anasayfa"></a>
+                    <div class="card-body">
+                        <a onclick="DirectPage(followerId)" title="Anasayfa"><h5>Mehmet Kemal Aslan  </h5></a>
+                    </div>
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="list-group" id="categories"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12" id="tags">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12" id="account">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-8">
+                <div class="card mt-2">
+                    <div class="col-sm-12" id="makale">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSetName" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="isim-yeni" class="col-form-label">Yeni isim:</label>
+                        <input type="text" class="form-control" id="isim-yeni">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalKaydetIsim" onclick="SetName()" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSetPassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="sifre-yeni" class="col-form-label">Yeni şifre:</label>
+                        <input type="password" class="form-control" id="sifre-yeni">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalKaydetSifre" onclick="SetPassword()" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            categoryList();
+            tagList();
+
+            var tagId = getParameterByName("tagId");
+            var categoryId = getParameterByName("categoryId");
+            var followerId = getParameterByName("followerId");
+            console.log("followerId",followerId)
+            articleList(0, 0, followerId);
+
+            articleList(categoryId, tagId, followerId);
+            accountPage(followerId);
+        })
+
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function categoryList() {
+            $.getJSON("https://localhost:44374/api/CategoryList", function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += '<a onclick="articleList(' + data[i].id + ', 0)" class="list-group-item list-group-item-action" >' + data[i].name + '<span class="badge bg-primary rounded-pill float-end" >' + data[i].count + '</span></a>';
+                }
+                document.getElementById("categories").innerHTML = html;
+            });
+        }
+
+        function tagList() {
+            $.getJSON("https://localhost:44374/api/TagList", function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += '<a onclick="articleList(0 , ' + data[i].id + ')"<span class="badge bg-warning text-dark m-1">' + data[i].name + '</span></a>'
+                }
+                document.getElementById("tags").innerHTML = html;
+            });
+        }
+
+        function articleList(categoryId, tagId, followerId) {
+            $.getJSON("https://localhost:44374/api/ArticleList?categoryId=" + categoryId + "&tagId=" + tagId, function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    var articleId = data[i].id
+                    html += `<div class="card mb-3 p-2">
+                                    <h5 class="card-title">` + data[i].title + `</h5>
+                                    <p class="card-subtitle mb-2 text-muted">` + data[i].date + `</p>
+                                    <h6 class="card-subtitle mb-2 text-muted">` + data[i].category + `</h6>
+                                    <p class="card-text">` + data[i].summary + `</p>
+                                    <a href="file:///C:/Users/stajyer/Desktop/HTML/BSGMakale.html?makaleId=`+ data[i].id + "&followerId=" + followerId + `" class="card-link" style="color:blue;">Devamini oku</a>
+                                </div>`
+                }
+                document.getElementById("makale").innerHTML = html;
+            });
+        }
+
+        function accountPage(followerId) {
+            var articleId = getParameterByName("makaleId");
+            $.getJSON("https://localhost:44374/api/AccountPage?followerId=" + followerId, function (data) {
+                var html = "";
+                html += `<div align="center" class="card p-2">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="C:\\Users\\stajyer\\Desktop\\HTML\\resim1.jpg" alt="Profil fotosu" style="width:100%;">
+                                </div>
+                                <div class="col-9">
+                                    <button class="fa fa-user-cog btn btn-secondary btn-sm position-absolute top-1 end-0 mt-1" type="button" id="ModalSettings" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalSetName" type="button" href="#">İsim değiştir</a></li>
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalSetPassword" href="#">Şifre değiştir</a></li>
+                                        <li><a class="dropdown-item" href = 'file:///C:/Users/stajyer/Desktop/HTML/BSAnasayfa.html'` + articleId + `;">Çıkış yap</a></li>
+                                    </ul>
+                                    <h4 class="vertical-center card-title">` + data.userName + `</h4>
+                                </div>
+                            </div>
+                        </div>`
+
+                document.getElementById("account").innerHTML = html;
+            });
+        }
+
+        function DirectPage(followerId) {
+            var followerId = getParameterByName("followerId");
+            location.href = "file:///C:/Users/stajyer/Desktop/HTML/BSGAnasayfa.html?followerId=" + followerId;
+        }
+
+        function SetName() {
+            var yeniisim = document.getElementById("isim-yeni").value;
+            var nameId = getParameterByName("followerId");
+
+            var json = { newName: yeniisim, userId: nameId }
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/SetName',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("İsim değiştirildi.");
+                },
+                complete: function (data) {
+                    window.location.reload();
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+
+        function SetPassword() {
+            var yenisifre = document.getElementById("sifre-yeni").value;
+            var nameId = getParameterByName("followerId");
+
+            var json = { newPassword: yenisifre, userId: nameId }
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/SetPassword',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("Şifre değiştirildi.");
+                },
+                complete: function (data) {
+                    window.location.reload();
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+    </script>
+</body>
+</html>
+

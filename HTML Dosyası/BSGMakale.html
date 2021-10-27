@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+    BSGMakale
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #002749;
+        }
+
+        .card {
+            background-color: #ffed00;
+        }
+
+        .list-group a {
+            background-color: #ffed00;
+        }
+
+        a {
+            cursor: pointer;
+            text-decoration: none;
+            color: black
+        }
+
+        .row-button1 {
+            width: 150px;
+        }
+
+        .vertical-center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-4">
+
+                <div class="card">
+                    <a onclick="DirectPage(followerId)"><img src="C:\Users\stajyer\Desktop\HTML\resim.jpg" alt="Profil fotosu" style="width:100%;" title="Anasayfa"></a>
+                    <div class="card-body">
+                        <a onclick="DirectPage(followerId)" title="Anasayfa"><h5>Mehmet Kemal Aslan </h5></a>
+                    </div>
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="list-group" id="categories"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12" id="tags">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-2">
+                    <div class="row">
+                        <div class="col-sm-12" id="account">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-8">
+                <div class="card mt-2">
+                    <div class="col-sm-12" id="makale">
+                    </div>
+                </div>
+
+                <div class="card mt-1 mb-3">
+                    <div class="col-sm-12" id="yorum">
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="mb-0">
+                        <label style="color:white;" for="validationDefault03" class="form-label">Yorumunuz</label>
+                        <input type="text" class="form-control" id="UComment" />
+                    </div>
+                    <div>
+                        <button type="button" onclick="CommentAdd(articleId, followerId)" class="btn btn-primary mb-5">Yorum yap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Yorum Düzenleme</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Yorumu silmek istiyor musunuz?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalSil" onclick="DeleteComment()" data-bs-dismiss="modal">Evet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hayır</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Yorum Düzenleme</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="yorum-yeni" class="col-form-label">Yorum:</label>
+                        <input type="text" class="form-control" value="eskiyorum" id="yorum-yeni">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalKaydet" onclick="SetComment()" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSetName" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="isim-yeni" class="col-form-label">Yeni isim:</label>
+                        <input type="text" class="form-control" id="isim-yeni">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalKaydetIsim" onclick="SetName()" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSetPassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Kullanıcı Ayarları</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="sifre-yeni" class="col-form-label">Yeni şifre:</label>
+                        <input type="password" class="form-control" id="sifre-yeni">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="modalKaydetSifre" onclick="SetPassword()" data-bs-dismiss="modal">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        function CommentAdd(articleId, followerId) {
+
+            var Ucomment = document.getElementById("UComment").value;
+            var followerId = getParameterByName("followerId");
+
+            if (Ucomment == undefined || Ucomment == null || Ucomment == "") {
+                alert("Yorum giriniz.");
+                return;
+            }
+
+            var json = { followerId: followerId, articleId: articleId, uComment: Ucomment }
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/GetComment',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("Yorum yapıldı.");
+                },
+                complete: function (data) {
+                    commentList(articleId);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+
+            commentList(articleId);
+        }
+
+        var articleId = "";
+        var followerId = "";
+
+
+        $(document).ready(function () {
+            articleId = getParameterByName("makaleId");
+            var followerId = getParameterByName("followerId");
+
+            categoryList(followerId);
+            tagList(followerId);
+            accountPage(followerId);
+            getArticle(articleId);
+            commentList(articleId, followerId);
+        })
+
+
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        function categoryList(followerId) {
+            $.getJSON("https://localhost:44374/api/CategoryList", function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += '<a href="file:///C:/Users/stajyer/Desktop/HTML/BSGAnasayfa.html?categoryId=' + data[i].id + '&followerId=' + followerId + '&tagId=0" class="list-group-item list-group-item-action" >' + data[i].name + '<span class="badge bg-primary rounded-pill float-end" >' + data[i].count + '</span></a>';
+                }
+                document.getElementById("categories").innerHTML = html;
+            });
+        }
+
+        function tagList(followerId) {
+            $.getJSON("https://localhost:44374/api/TagList", function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += '<a href="file:///C:/Users/stajyer/Desktop/HTML/BSGAnasayfa.html?categoryId=0&tagId=' + data[i].id + '&followerId=' + followerId + '" <span class="badge bg-warning text-dark m-1">' + data[i].name + '</span></a>'
+                }
+                document.getElementById("tags").innerHTML = html;
+            });
+        }
+
+        function getArticle(articleId) {
+            $.getJSON("https://localhost:44374/api/GetArticle?articleId=" + articleId, function (data) {
+                var html = "";
+                html += `<div class="card mb-3 p-2">
+                                            <h5 class="card-title">` + data.title + `</h5>
+                                            <p class="card-subtitle mb-2 text-muted">` + data.date + `</p>
+                                            <h6 class="card-subtitle mb-2 text-muted">` + data.category + `</h6>
+                                            <p class="card-text">` + data.body + `</p>
+                                        </div>`
+
+                document.getElementById("makale").innerHTML = html;
+            });
+        }
+
+        function commentList(articleId, followerId) {
+            var followerId = getParameterByName("followerId");
+            $.getJSON("https://localhost:44374/api/CommentList?articleId=" + articleId, function (data) {
+                var html = "";
+                for (var i = 0; i < data.length; i++) {
+                    html += `<div class="card mb-3 p-2">`
+                    if (data[i].commenterId == followerId) {
+                        html += `<div class="dropdown">
+                                        <button class="fa fa-ellipsis-v btn btn-warning btn-sm position-absolute top-0 end-0" type="button"  id="data[i].commentId" data-bs-toggle="dropdown" aria-expanded="false">
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-bs-whatever="@mdo" onclick="OldComment(`+ data[i].commentId + `)" type="button" href="#">Değiştir</a></li>
+                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" onclick="OldComment(`+ data[i].commentId + `)" href="#">Sil</a></li>
+                                        </ul>
+                                    </div>`
+                    }
+                    html += `<h5 class="card-title">` + data[i].userName + `</h5>
+                                            <p class="card-subtitle mb-2 text-muted">` + data[i].userMail + `</p>
+                                            <h6 class="card-subtitle mb-2 text-muted">` + data[i].comDate + `</h6>
+                                            <p class="card-text">` + data[i].userComment + `</p>
+                                        </div>`
+                }
+                document.getElementById("yorum").innerHTML = html;
+            });
+        }
+
+        function accountPage(followerId) {
+            var articleId = getParameterByName("makaleId");
+            $.getJSON("https://localhost:44374/api/AccountPage?followerId=" + followerId, function (data) {
+                var html = "";
+                html += `<div align="center" class="card p-2">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img src="C:\\Users\\stajyer\\Desktop\\HTML\\resim1.jpg" alt="Profil fotosu" style="width:100%;">
+                                </div>
+                                <div class="col-9">
+                                    <button class="fa fa-user-cog btn btn-secondary btn-sm position-absolute top-1 end-0 mt-1" type="button" id="ModalSettings" data-bs-toggle="dropdown" aria-expanded="false">
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalSetName" type="button" href="#">İsim değiştir</a></li>
+                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalSetPassword" href="#">Şifre değiştir</a></li>
+                                        <li><a class="dropdown-item" href = 'file:///C:/Users/stajyer/Desktop/HTML/BSAnasayfa.html'` + articleId + `;">Çıkış yap</a></li>
+                                    </ul>
+                                    <h4 class="vertical-center card-title">` + data.userName + `</h4>
+                                </div>
+                            </div>
+                        </div>`
+                document.getElementById("account").innerHTML = html;
+            });
+        }
+
+        function DirectPage(followerId) {
+            var followerId = getParameterByName("followerId");
+            location.href = "file:///C:/Users/stajyer/Desktop/HTML/BSGAnasayfa.html?followerId=" + followerId;
+        }
+
+        function OldComment(commentId) {
+            $.getJSON("https://localhost:44374/api/CommentList?articleId=" + articleId, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].commentId == commentId) {
+                        document.getElementById("yorum-yeni").value = data[i].userComment;
+                        document.getElementById("modalKaydet").value = commentId;
+                        document.getElementById("modalSil").value = commentId;
+                    }
+                }
+            })
+        };
+
+        function SetComment() {
+            var yeniyorum = document.getElementById("yorum-yeni").value;
+            var commentId = document.getElementById("modalKaydet").value;
+
+            var json = { newComment: yeniyorum, yorum_Id: commentId }
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/SetComment',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("Yorum değiştirildi.");
+                },
+                complete: function (data) {
+                    commentList(articleId);
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+
+        function DeleteComment() {
+            var commentId = document.getElementById("modalSil").value;
+
+            $.getJSON("https://localhost:44374/api/DeleteComment?commentId=" + commentId, function (data) {
+                $.ajax({
+                    success: function () {
+                        alert("Yorum silindi.");
+                    },
+                    complete: function (data) {
+                        commentList(articleId);
+                    }
+                });
+            })
+        }
+
+        function SetName() {
+            var yeniisim = document.getElementById("isim-yeni").value;
+            var nameId = getParameterByName("followerId");
+            console.log("isim: ",yeniisim,"  Id: ", nameId)
+
+            var json = { newName: yeniisim, userId: nameId }
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/SetName',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("İsim değiştirildi.");
+                },
+                complete: function (data) {
+                    window.location.reload();
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+
+        function SetPassword() {
+            var yenisifre = document.getElementById("sifre-yeni").value;
+            var nameId = getParameterByName("followerId");
+            console.log("isim: ", yenisifre, "  Id: ", nameId)
+
+            var json = { newPassword: yenisifre, userId: nameId }
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:44374/api/SetPassword',
+                data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+                success: function () {
+                    alert("Şifre değiştirildi.");
+                },
+                complete: function (data) {
+                    window.location.reload();
+                },
+                contentType: "application/json",
+                dataType: 'json'
+            });
+        }
+
+    </script>
+</body>
+</html>
