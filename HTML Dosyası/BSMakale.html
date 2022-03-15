@@ -1,7 +1,6 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-    BSMakale
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +32,7 @@
             <div class="col-4">
 
                 <div class="card">
-                    <a href="file:///C:/Users/stajyer/Desktop/HTML/BSAnasayfa.html"><img src="C:\Users\stajyer\Desktop\HTML\resim.jpg" alt="Profil fotosu" style="width:100%;" title="Anasayfa"></a>
+                    <a href="file:///C:/Users/stajyer/Desktop/HTML/BSAnasayfa.html"><img src="C:\Users\HP\Desktop\1Mehmet\HTML\resim.jpg" alt="Profil fotosu" style="width:100%;" title="Anasayfa"></a>
                     <div class="card-body">
                         <a href="file:///C:/Users/stajyer/Desktop/HTML/BSAnasayfa.html" title="Anasayfa"><h5>Mehmet Kemal Aslan  </h5></a>
                     </div>
@@ -87,6 +86,40 @@
             commentList(articleId);
         })
 
+        //function CommentAdd() {
+        //    var uname = document.getElementById("UName").value;
+        //    var Umail = document.getElementById("UMail").value;
+        //    var Ucomment = document.getElementById("UComment").value;
+        //    var articleId = getParameterByName("makaleId");
+
+        //    if (uname  == undefined || uname == null || uname == "") {
+        //        alert("Kullanıcı adını giriniz.");;
+        //        return;
+        //    }
+        //    if (Umail == undefined || Umail == null || Umail == "") {
+        //        alert("E-posta adresini giriniz.");;
+        //        return;
+        //    }
+        //    if (Ucomment == undefined || Ucomment == null || Ucomment == "") {
+        //        alert("Yorum giriniz.");;
+        //        return;
+        //    }
+
+        //    var json = { uName: uname, uMail: Umail, uComment: Ucomment, articlid: articleId}
+
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: 'https://localhost:44374/api/GetComment',
+        //        data: JSON.stringify(json), // or JSON.stringify ({name: 'jonas'}),
+        //        contentType: "application/json",
+        //        dataType: 'json'
+        //    });
+
+        //    commentList(articleId);
+        //    //window.location.reload();
+        //}
+        
+
         function getParameterByName(name, url = window.location.href) {
             console.log(url);
             name = name.replace(/[\[\]]/g, '\\$&');
@@ -96,6 +129,8 @@
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
+
+
 
         function categoryList() {
             $.getJSON("https://localhost:44374/api/CategoryList", function (data) {
